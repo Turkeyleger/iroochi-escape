@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色が抜け落ちたアトリエからの脱出 #色落ち脱出</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f4f1eb;
+            --text-color: #333333;
+            --accent-color: #8b0000;
+            --border-color: #cccccc;
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            
+            /* モノクロから色が戻るアニメーション */
+            animation: colorize 5s ease-in-out forwards;
+            animation-delay: 1.5s;
+            filter: grayscale(100%);
+        }
+
+        @keyframes colorize {
+            0% { filter: grayscale(100%); }
+            100% { filter: grayscale(0%); }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* ティザー画像の設定 */
+        .teaser-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        h1, h2 {
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+        }
+
+        .hashtag {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 60px;
+            margin-bottom: 30px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 50px;
+        }
+
+        .catchphrase {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .character-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .character-list li {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .character-list strong {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            width: 30%;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="01.jpg" alt="色が抜け落ちたアトリエからの脱出 ティザー画像" class="teaser-image">
+
+    <div class="hero">
+        <p class="catchphrase">天才絵師のアトリエで起きた、前代未聞のトラブル。<br>失われた「色」を取り戻し、幻のアトリエツアーを成功させよ！</p>
+        <h1>色が抜け落ちたアトリエからの脱出</h1>
+        <div class="hashtag">#色落ち脱出</div>
+    </div>
+
+    <section id="story">
+        <h2>STORY</h2>
+        <p>今日は待ちに待ったアトリエツアー。<br>あなたは、天才的な絵画が生み出されるという魔法のアトリエに招待された参加者です。</p>
+        <p>しかし、ツアー開始の30分前。アトリエの中から、弟子の悲鳴が聞こえてきました。</p>
+        <p><strong>「うわあ～～～どうしよ～～～～～！！」</strong></p>
+        <p>急いで中に入ると、なんと飾られていた絵画からすべての「色」が抜け落ちてしまっていたのです！<br>原因は、おっちょこちょいな弟子、リースのやらかしでした。</p>
+        <p><strong>「このままだと師匠にクビにされちゃう！どうにかして助けてください～～～！」</strong></p>
+        <p>ツアー開始まで残り30分。<br>絵画が完成しなければ、師匠をアトリエに入れることはできず、ツアーは中止になってしまいます。<br>魔法のペンとインクの謎を解き明かし、アトリエに「色」を取り戻すことができるでしょうか？</p>
+    </section>
+
+    <section id="character">
+        <h2>CHARACTER</h2>
+        <ul class="character-list">
+            <li>
+                <strong>あなた（参加者）</strong>
+                魔法のアトリエのツアーにやってきたお客さん。リースの泣き落としにより、絵画の復元を手伝うことに。
+            </li>
+            <li>
+                <strong>リース（NPC）</strong>
+                天才師匠の弟子になったばかりの若者。おどおどした性格で、少し抜けているところがある。
+            </li>
+            <li>
+                <strong>師匠</strong>
+                天才的な腕を持つアトリエの主。絵画が復元できているか、厳しくチェックしにやってくる。
+            </li>
+        </ul>
+    </section>
+
+    <section id="system">
+        <h2>SYSTEM</h2>
+        <p><strong>✒️ 魔法のペンを駆使せよ</strong><br>合言葉を与えると、魔法の力でインクが出たり、自動で色を塗ってくれる不思議なペンを使います。</p>
+        <p><strong>🤝 仲間と協力して謎を解け</strong><br>同じチームのメンバーと協力して、謎解きに挑戦します。</p>
+        <p><strong>⏳ 制限時間は30分</strong><br>アトリエツアーが始まるまでの30分以内に、すべての絵画を復元させなければなりません。</p>
+    </section>
+
+    <section id="info">
+        <h2>INFORMATION</h2>
+        <table>
+            <tr>
+                <th>公演名</th>
+                <td>色が抜け落ちたアトリエからの脱出</td>
+            </tr>
+            <tr>
+                <th>開催日程</th>
+                <td>202X年X月X日（予定）</td>
+            </tr>
+            <tr>
+                <th>開催場所</th>
+                <td>Discord / ココフォリア（オンライン開催）</td>
+            </tr>
+            <tr>
+                <th>チーム人数</th>
+                <td>〇名1チーム</td>
+            </tr>
+        </table>
+    </section>
+</div>
+
+</body>
+</html>
