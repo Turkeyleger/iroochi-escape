@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色が抜け落ちたアトリエからの脱出 #色落ち脱出</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f4f1eb;
+            --text-color: #333333;
+            --accent-color: #8b0000;
+            --border-color: #cccccc;
+            --section-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* オープニング中はスクロールを禁止するクラス */
+        body.locked {
+            overflow: hidden;
+        }
+
+        /* === オープニング画面（幕）の設定 === */
+        #opening-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s;
+        }
+
+        #opening-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #opening-text {
+            color: #ffffff;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            letter-spacing: 5px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: textFadeIn 2s ease-out forwards;
+        }
+
+        @keyframes textFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === 全体の白黒制御 === */
+        .grayscale-target {
+            filter: grayscale(100%);
+            transition: filter 3s ease-in-out;
+        }
+
+        /* ステージ2（完全クリア）でサイト全体の色が戻る */
+        body.stage2-clear .grayscale-target {
+            filter: grayscale(0%);
+        }
+
+        /* === レイアウト設定 === */
+        .teaser-image {
+            width: 66.6%;
+            max-width: 1000px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        section, .hero {
+            width: 100%;
+            padding: 80px 0;
+            box-sizing: border-box;
+        }
+
+        .section-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        section:nth-of-type(even) {
+            background-color: var(--section-bg);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        h1, h2 {
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .hashtag {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            letter-spacing: 4px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            margin: 15px auto 0;
+        }
+
+        .catchphrase {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 2;
+        }
+
+        .character-list {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .character-list li {
+            background: var(--bg-color);
+            padding: 50px;
+            border-radius: 4px;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .character-list strong {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        th {
+            width: 30%;
+            background-color: #f9f9f9;
+        }
+
+        /* === 謎解きエリア全体（レイアウト用） === */
+        .magic-form-section {
+            text-align: center;
+            padding: 100px 20px 150px;
+            background-color: var(--bg-color);
+        }
+
+        /* === 画像エリアとフェード演出 === */
+        .magic-image-container {
+            position: relative;
+            width: 600px;
+            max-width: 90%;
+            height: auto;
+            margin: 0 auto 30px;
+            
+            /* 初期は白黒 */
+            filter: grayscale(100%) drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+            transition: filter 3s ease-in-out;
+        }
+
+        /* ステージ1（または2）クリアで、画像コンテナの色が戻る */
+        body.stage1-clear .magic-image-container,
+        body.stage2-clear .magic-image-container {
+            filter: grayscale(0%) drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+        }
+
+        .magic-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: opacity 3s ease-in-out;
+        }
+
+        #image-02 {
+            opacity: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        body.stage1-clear #image-02,
+        body.stage2-clear #image-02 {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        #image-03 {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        body.stage1-clear #image-03,
+        body.stage2-clear #image-03 {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        /* === 入力エリアの横並び設定 === */
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 15px;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .atelier-input {
+            flex: 1;
+            width: 100%;
+            margin: 0;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-family: 'Noto Serif JP', serif;
+            border: 2px solid var(--border-color);
+            background: #fff;
+            border-radius: 4px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .atelier-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .atelier-input.error {
+            border-color: var(--accent-color);
+            background-color: #fff5f5;
+        }
+
+        /* === ボタン === */
+        .magic-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            /* 入力欄が消えても高さが崩れないように固定パディングを指定 */
+            padding: 16px 40px; 
+            font-size: 1.2rem;
+            font-family: 'Noto Serif JP', serif;
+            font-weight: bold;
+            color: #fff;
+            background-color: var(--text-color);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+        .magic-button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .magic-button.activated {
+            background-color: #2e7d32;
+            pointer-events: none;
+        }
+
+        /* === エラーメッセージ === */
+        #error-msg {
+            color: var(--accent-color);
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* === フッタークレジット === */
+        .footer-credit {
+            text-align: right;
+            padding: 20px 5%;
+            color: #999999;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .teaser-image { width: 90%; }
+            section, .hero { padding: 40px 0; }
+            .catchphrase { font-size: 1.1rem; }
+            th { width: 40%; }
+            
+            .input-group {
+                flex-direction: row;
+                gap: 10px;
+            }
+            .atelier-input {
+                font-size: 1rem;
+                padding: 12px;
+            }
+            .magic-button {
+                font-size: 1rem;
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body class="locked">
+
+<div id="opening-screen">
+    <div id="opening-text">ようこそ、魔法のアトリエへ</div>
+</div>
+
+<div class="container">
+    <img src="01.png" alt="色が抜け落ちたアトリエからの脱出 ティザー画像" class="teaser-image grayscale-target">
+
+    <div class="hero grayscale-target">
+        <div class="section-inner">
+            <p class="catchphrase">天才絵師のアトリエで起きた、前代未聞のトラブル。<br>失われた「色」を取り戻し、幻のアトリエツアーを成功させよ！</p>
+            <h1>色が抜け落ちたアトリエからの脱出</h1>
+            <div class="hashtag">#色落ち脱出</div>
+        </div>
+    </div>
+
+    <section id="story" class="grayscale-target">
+        <div class="section-inner">
+            <h2>STORY</h2>
+            <p>今日は待ちに待ったアトリエツアー。あなたは、天才的な絵画が生み出されるという魔法のアトリエに招待された参加者です。</p>
+            <p>しかし、ツアー開始の50分前。アトリエの中から、弟子の悲鳴が聞こえてきました。</p>
+            <p style="font-size: 1.2rem; text-align: center; margin: 40px 0;"><strong>「うわあ～～～どうしよ～～～～～！！」</strong></p>
+            <p>急いで中に入ると、なんと飾られていた絵画からすべての「色」が抜け落ちてしまっていたのです！原因は、おっちょこちょいな弟子のやらかしでした。</p>
+            <p>「このままでは師匠にクビにされちゃう！どうにかして助けてください～～～！」</p>
+            <p>ツアー開始まで残り50分。絵画が完成しなければ、ツアーは中止になってしまいます。魔法のペンとインクの謎を解き明かし、アトリエに「色」を取り戻すことができるでしょうか？</p>
+        </div>
+    </section>
+
+    <section id="character" class="grayscale-target">
+        <div class="section-inner">
+            <h2>CHARACTER</h2>
+            <ul class="character-list">
+                <li>
+                    <strong>あなた</strong>
+                    魔法のアトリエのツアーにやってきたお客さん。弟子の泣き落としにより、絵画の復元を手伝うことに。
+                </li>
+                <li>
+                    <strong>弟子</strong>
+                    天才画家の弟子になったばかりの若者。おどおどした性格で、少し抜けているところがある。
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="magic-form-section">
+        
+        <div class="section-inner grayscale-target">
+            <h2 style="margin-bottom: 20px;">お試し謎</h2>
+            <p style="margin-bottom: 30px;">アトリエに色を取り戻すための「合言葉」を入力してください。</p>
+        </div>
+        
+        <div class="magic-image-container">
+            <img src="02.png" alt="魔法のパレット(初期)" class="magic-image" id="image-02">
+            <img src="03.png" alt="魔法のパレット(完成)" class="magic-image" id="image-03">
+        </div>
+
+        <div class="section-inner grayscale-target">
+            <div class="input-group">
+                <input type="text" id="magic-word" placeholder="合言葉を入力してください" class="atelier-input">
+                <button id="restore-color-btn" class="magic-button">色を取り戻す</button>
+            </div>
+            <p id="error-msg">どうやら違うみたいだ・・・</p>
+        </div>
+        
+    </div>
+
+    <section id="info" class="grayscale-target">
+        <div class="section-inner">
+            <h2>INFORMATION</h2>
+            <table>
+                <tr>
+                    <th>公演名</th>
+                    <td>色が抜け落ちたアトリエからの脱出</td>
+                </tr>
+                <tr>
+                    <th>開催日程</th>
+                    <td>2026年5月2日</td>
+                </tr>
+                <tr>
+                    <th>開催場所</th>
+                    <td>千葉県 BASE-千葉会議室</td>
+                </tr>
+                <tr>
+                    <th>チーム人数</th>
+                    <td>1～3人</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <div class="footer-credit grayscale-target">
+        CU23脱出政策委員会
+    </div>
+</div>
+
+<script>
+    // === オープニングアニメーションの制御 ===
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('opening-screen').classList.add('fade-out');
+            
+            setTimeout(function() {
+                document.body.classList.remove('locked');
+            }, 1500);
+        }, 2500);
+    });
+
+    // === 謎解きギミックの制御 ===
+    const restoreBtn = document.getElementById('restore-color-btn');
+    const magicInput = document.getElementById('magic-word');
+    const errorMsg = document.getElementById('error-msg');
+
+    let currentStage = 1;
+    
+    const stage1Words = ['ふしぎ', 'フシギ', '不思議'];
+    const stage2Words = ['まっすぐ', '真っ直ぐ', '真っすぐ'];
+
+    restoreBtn.addEventListener('click', function() {
+        const inputVal = magicInput.value.trim();
+
+        if (currentStage === 1) {
+            if (stage1Words.includes(inputVal)) {
+                // 画像の色と切り替えを発動
+                document.body.classList.add('stage1-clear');
+                
+                magicInput.value = '';
+                magicInput.placeholder = '最後の合言葉を入力...';
+                
+                this.textContent = '色を取り戻す';
+                errorMsg.style.display = 'none';
+                
+                currentStage = 2;
+            } else {
+                showError();
+            }
+        } else if (currentStage === 2) {
+            if (stage2Words.includes(inputVal)) {
+                // サイト全体の色を戻す
+                document.body.classList.add('stage2-clear');
+                
+                this.classList.add('activated');
+                this.textContent = 'アトリエに色が戻ったようだ...！';
+                
+                magicInput.style.display = 'none';
+                errorMsg.style.display = 'none';
+            } else {
+                showError();
+            }
+        }
+    });
+
+    function showError() {
+        errorMsg.style.display = 'block';
+        magicInput.classList.add('error');
+        magicInput.select();
+
+        errorMsg.style.animation = 'none';
+        errorMsg.offsetHeight; 
+        errorMsg.style.animation = null;
+    }
+
+    magicInput.addEventListener('input', function() {
+        this.classList.remove('error');
+        errorMsg.style.display = 'none';
+    });
+
+    magicInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            restoreBtn.click();
+        }
+    });
+</script>
+
+</body>
+</html>
